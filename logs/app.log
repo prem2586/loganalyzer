@@ -1,0 +1,5 @@
+2023-08-07 10:00:01 ERROR Failed to connect to database
+2023-08-07 10:01:15 WARN Retrying connection
+2023-08-07 10:01:30 INFO Connected to database
+2023-08-07 10:05:42 ERROR Timeout during data fetch
+2023-08-07 10:06:00 INFO Recovery initiated

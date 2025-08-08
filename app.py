@@ -8,18 +8,31 @@ st.title("🧠 Agentic AI Log Analyzer")
 st.markdown("Upload a log file or analyze a sample to get started.")
 
 # File uploader
-uploaded_file = st.file_uploader("Upload a log file (.log)", type=["log", "txt"])
 
 # Or use sample
-use_sample = st.button("Use sample log (app.log)")
+
+# Select log source
+log_source = st.selectbox(
+    "Choose log source:",
+    options=["Upload a file", "Use sample log (logs/app.log)"]
+)
 
 log_text = ""
 
-if uploaded_file:
-    log_text = read_logs(uploaded_file, max_lines=100)
-elif use_sample:
-    with open("logs/app.log", "r") as f:
-        log_text = f.read()
+if log_source == "Upload a file":
+    uploaded_file = st.file_uploader("Upload a log file (.log)", type=["log", "txt"])
+    if uploaded_file:
+        log_text = read_logs(uploaded_file, max_lines=100)
+
+elif log_source == "Use sample log (logs/app.log)":
+    try:
+        with open("logs/app.log", "r") as f:
+            print("reading file")
+            log_text = read_logs(f, max_lines=100)
+            st.text(f"Log length: {len(log_text)}")
+    except FileNotFoundError:
+        st.error("Sample log not found at logs/app.log")
+
 st.text(f"Log length: {len(log_text)}")
 
 if log_text:

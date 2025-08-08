@@ -1,20 +1,18 @@
 def read_logs(file_obj, max_lines=100):
     """
-    Reads the last `max_lines` lines from a log file.
-    Handles both uploaded file-like objects and regular file handles.
-
-    Args:
-        file_obj: A file-like object (from open() or Streamlit uploader)
-        max_lines: Number of lines to keep from the end
-
-    Returns:
-        A single string containing the last N lines
+    Reads the last `max_lines` lines from a file-like object.
+    Supports both binary streams (from Streamlit uploaders)
+    and regular text files (from open()).
     """
     try:
-        # For uploaded files (Streamlit): need to decode from bytes
-        lines = file_obj.read().decode("utf-8").splitlines()
-    except AttributeError:
-        # For local open() files: already in string format
+        # If binary (Streamlit upload)
+        content = file_obj.read()
+        if isinstance(content, bytes):
+            content = content.decode("utf-8")
+        lines = content.splitlines()
+    except Exception as e:
+        # If already a text file
         lines = file_obj.readlines()
 
     return "\n".join(lines[-max_lines:])
+
